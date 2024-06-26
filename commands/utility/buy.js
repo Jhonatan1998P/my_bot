@@ -18,9 +18,13 @@ module.exports = {
     const itemName = interaction.options.getString('item');
     const userId = interaction.user.id;
 
+    //este codigo obtiene los edificios del jugador
+    let ed1 = await db.get(`casas_${userId}`) || 0;
+    let ed2 = await db.get(`rascacielos_${userId}`) || 0;
+
     const shopItems = {
-      "Casa": 1000,
-      "Rascacielo": 5000,
+      "Casa": (1000 * (0.05 * ed1)) + 1000,
+      "Rascacielo": (5000 * (0.05 * ed2)) + 5000,
     };
 
     if (!shopItems[itemName]) {
