@@ -2,6 +2,9 @@ const { SlashCommandBuilder } = require('discord.js');
 const { QuickDB } = require('quick.db');
 const db = new QuickDB(); 
 
+const opt = { style: 'currency', currency: 'USD' };
+const nf2 = new Intl.NumberFormat('en-US', opt);
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('trabajar')
@@ -23,11 +26,11 @@ module.exports = {
 
     await db.set(`cooldown_trabajar_${userId}`, Ahora);
     
-    const ganancias = Math.floor(Math.random() * 1000) + 1;
+    const ganancias = Math.floor(Math.random() * 100) + 1;
 
     await db.add(`coins_${userId}`, ganancias);
 
-    await interaction.reply(`Has trabajado y has ganado ${ganancias} monedas.`);
+    await interaction.reply(`Has trabajado y has ganado ${nf2.format(ganancias)} monedas.`);
 
     await db.set(`cooldown_${userId}`, 'true');
     
