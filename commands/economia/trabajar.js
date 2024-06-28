@@ -26,11 +26,14 @@ module.exports = {
 
     await db.set(`cooldown_trabajar_${userId}`, Ahora);
     
-    const ganancias = Math.floor(Math.random() * 100) + 1;
+    const ganancias = Math.floor(Math.random() * 250) + 1;
 
     await db.add(`coins_${userId}`, ganancias);
 
-    await interaction.reply(`Has trabajado y has ganado ${nf2.format(ganancias)} monedas.`);
+    //guarda la cantidad de dinero ganado por el jugador
+    await db.add(`coinsearned_${userId}`, ganancias);
+
+    await interaction.reply(`Has trabajado y has ganado ${nf2.format(ganancias)}.`);
 
     await db.set(`cooldown_${userId}`, 'true');
     

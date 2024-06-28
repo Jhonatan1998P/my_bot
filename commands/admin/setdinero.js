@@ -36,8 +36,10 @@ module.exports = {
         ephemeral: true
       });
     }
-
-    await db.set(`coins_${usuario2.id}`, 0);
+    
+    await db.set(`coins_${usuario2.id}`, cantidad);
+    await db.add(`coinsearned_${usuario2.id}`, cantidad);
+    
     await interaction.reply(`Ha establecido ${cantidad} de dinero al jugador ${usuario2}`);
   }, 
 };

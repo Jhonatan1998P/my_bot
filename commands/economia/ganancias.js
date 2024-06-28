@@ -11,7 +11,7 @@ let formula = 0;
 module.exports = {
   data: new SlashCommandBuilder()
     .setName("ganancias")
-    .setDescription("con esto puedes recojer tus ganancias"),
+    .setDescription("con esto puedes recojer tus ganancias"), 
 
   async execute(interaction) {
     let ed1 = await db.get(`casas_${interaction.user.id}`) || 0;
@@ -23,25 +23,31 @@ module.exports = {
     const TiempoGanancias = await db.get(`tiempoganancias_${interaction.user.id}`) || 0;
     
       const Edificios = [
-      { name: "Casas", amount: ed1, profit: (ed1 * 10) },
-      { name: "Mansiones", amount: ed2, profit: (ed2 * 100) },
-      { name: "Fabricas", amount: ed3, profit: (ed3 * 400) },
-      { name: "Gasolinerias", amount: ed4, profit: (ed4 * 1000) }, 
-      { name: "Centro Comerciales", amount: ed5, profit: (ed5 * 1500) }, 
-      { name: "Bancos", amount: ed6, profit: (ed6 * 2750) },
+      { name: "Casas", amount: ed1, profit: (ed1 * 10), income: 10 },
+      { name: "Mansiones", amount: ed2, profit: (ed2 * 100) , income: 100},
+      { name: "Fabricas", amount: ed3, profit: (ed3 * 600) , income: 600},
+      { name: "Gasolinerias", amount: ed4, profit: (ed4 * 1500), income: 1500 }, 
+      { name: "Centro Comerciales", amount: ed5, profit: (ed5 * 2100), income: 2100 }, 
+      { name: "Bancos", amount: ed6, profit: (ed6 * 4000), income: 4000 },
     ];
-    
+      
       const embed = new EmbedBuilder()
 
       .setTitle("Ganancias")
       .setColor("Blue");
 
      Edificios.forEach((item) => {
-       formula = (item.profit / 600000) * (Date.now() - TiempoGanancias)
+       
+       if ((Date.now() - TiempoGanancias) >= (1000 * 3600)) {
+       formula = (item.profit / 60000) * (1000 * 3600)
+       } else {
+         formula = (item.profit / 60000) * (Date.now() - TiempoGanancias)
+       };
+       
        ganancias = ganancias + formula
 
       embed.addFields({
-        name: `${item.amount}x ${item.name}`,
+        name: `${item.amount}x ${item.name}  (${item.income}/min)`,
         value: `${nf2.format(formula)}`,
         inline: false,
       });
@@ -50,6 +56,9 @@ module.exports = {
     await db.set(`tiempoganancias_${interaction.user.id}`, Date.now());
 
     await db.add(`coins_${interaction.user.id}`, ganancias);
+
+    //guarda la cantidad de dinero ganado por el jugador
+    await db.add(`coinsearned_${interaction.user.id}`, ganancias);
 
     ganancias = 0;
     formula = 0;

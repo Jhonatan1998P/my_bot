@@ -2,6 +2,9 @@ const { SlashCommandBuilder } = require('discord.js');
 const { QuickDB } = require('quick.db');
 const db = new QuickDB();
 
+const opt = { style: 'currency', currency: 'USD' };
+const nf2 = new Intl.NumberFormat('en-US', opt);
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('buy')
@@ -16,11 +19,18 @@ module.exports = {
         { name: 'Fabrica', value: 'Fabrica' }, 
         { name: 'Gasolineria', value: 'Gasolineria' }, 
         { name: 'Centro Comercial', value: 'Centro Comercial' }, 
-        { name: 'Banco', value: 'Banco' })), 
+        { name: 'Banco', value: 'Banco' }, 
+        { name: 'Saboteador', value: 'Saboteador' }, 
+        { name: 'GuardaEspalda', value: 'GuardaEspalda' },))
+    .addStringOption(option => 
+      option.setName('cantidad')
+      .setDescription('Cantidad de inmuebles a comprar')
+      .setRequired(true)), 
 
   async execute(interaction) {
     const itemName = interaction.options.getString('item');
     const userId = interaction.user.id;
+    const cantidad = interaction.options.getString('cantidad');
 
     //este codigo obtiene los edificios del jugador
     let ed1 = await db.get(`casas_${userId}`) || 0;
@@ -31,12 +41,14 @@ module.exports = {
     let ed6 = await db.get(`bancos_${interaction.user.id}`) || 0;
 
     const shopItems = {
-      "Casa": (1000 * (0.05 * ed1)) + 1000,
-      "Mansion": (10000 * (0.05 * ed2)) + 10000, 
-      "Fabrica": (50000 * (0.05 * ed3)) + 50000, 
-      "Gasolineria": (125000 * (0.05 * ed4)) + 125000,
-      "Centro Comercial": (180000 * (0.05 * ed5)) + 180000, 
-      "Banco": (350000 * (0.05 * ed6)) + 350000,
+      "Casa": ((1000 * (0.05 * ed1)) + 1000) * cantidad,
+      "Mansion": ((10000 * (0.05 * ed2)) + 10000) * cantidad, 
+      "Fabrica": ((50000 * (0.05 * ed3)) + 50000) * cantidad, 
+      "Gasolineria": ((125000 * (0.05 * ed4)) + 125000) * cantidad,
+      "Centro Comercial": ((180000 * (0.05 * ed5)) + 180000) * cantidad , 
+      "Banco": (350000 * (0.05 * ed6)) + 350000, 
+      "Saboteador": 10000 * cantidad, 
+      "GuardaEspalda": 5000 * cantidad,
     };
 
     if (!shopItems[itemName]) {
@@ -47,27 +59,32 @@ module.exports = {
     const userCoins = await db.get(`coins_${userId}`) || 0;
 
     if (userCoins < itemPrice) {
-      return await interaction.reply(`No tienes \`${itemPrice}\` de dinero para comprar este inmueble.`);
+      return await interaction.reply(`No tienes \`${itemPrice}\` de dinero para comprar este inmueble o personal.`);
     }
     
 //codigo que guarda el inmueble en la base de datos
 if (itemName === "Casa") {
-    await db.add(`casas_${userId}`, 1)
+    await db.add(`casas_${userId}`, cantidad)
 } else if (itemName === "Mansion") {
-    await db.add(`mansiones_${userId}`, 1)
+    await db.add(`mansiones_${userId}`, cantidad)
 } else if (itemName === "Fabrica") {
-    await db.add(`fabricas_${userId}`, 1)
+    await db.add(`fabricas_${userId}`, cantidad)
 } else if (itemName === "Gasolineria") {
-    await db.add(`gasolinerias_${userId}`, 1)
+    await db.add(`gasolinerias_${userId}`, cantidad)
 } else if (itemName === "Centro Comercial") {
-    await db.add(`centrocomerciales_${userId}`, 1)
+    await db.add(`centrocomerciales_${userId}`, cantidad)
 } else if (itemName === "Banco") {
-    await db.add(`bancos_${userId}`, 1)
+    await db.add(`bancos_${userId}`, cantidad)
+} else if (itemName === "Saboteador") {
+  await db.add(`saboteadores_${userId}`, cantidad)
+} else if (itemName === "GuardaEspalda") {
+  await db.add(`guardaespaldas_${userId}`, cantidad)
 };
     //console.log("Casas " + await db.get(`casas_${userId}`)) 
     
 //codigo que responde al usuario cuando su compra es exitosa
     await db.sub(`coins_${userId}`, itemPrice);
-    await interaction.reply(`Has comprado ${itemName} por \`${itemPrice}\`monedas. Te quedan ${userCoins - itemPrice} monedas.`);
+    
+    await interaction.reply(`Has comprado ${itemName} por \`${nf2.format(itemPrice)}\` monedas. Te quedan ${userCoins - itemPrice} monedas.`);
   },
 };
