@@ -44,9 +44,9 @@ module.exports = {
       "Casa": ((1000 * (0.05 * ed1)) + 1000) * cantidad,
       "Mansion": ((10000 * (0.05 * ed2)) + 10000) * cantidad, 
       "Fabrica": ((50000 * (0.05 * ed3)) + 50000) * cantidad, 
-      "Gasolineria": ((125000 * (0.05 * ed4)) + 125000) * cantidad,
-      "Centro Comercial": ((180000 * (0.05 * ed5)) + 180000) * cantidad , 
-      "Banco": (350000 * (0.05 * ed6)) + 350000, 
+      "Gasolineria": ((200000 * (0.05 * ed4)) + 200000) * cantidad,
+      "Centro Comercial": ((450000 * (0.05 * ed5)) + 450000) * cantidad , 
+      "Banco": (800000 * (0.05 * ed6)) + 800000, 
       "Saboteador": 10000 * cantidad, 
       "GuardaEspalda": 5000 * cantidad,
     };
