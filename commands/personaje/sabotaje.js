@@ -15,8 +15,13 @@ module.exports = {
     .setRequired(true)), 
 
   async execute(interaction) {
+    const displayname1 = interaction.member.displayName;
     const userId = interaction.user.id;
+    const displayname2 =
+interaction.options.getUser('objetivo').displayName;
     const objetivo = interaction.options.getUser('objetivo');
+    let cooldowndeff = await db.get(`cooldowndeff_${objetivo.id}` || 0);
+    
     const Saboteadores = await db.get(`saboteadores_${userId}`) || 0;
     const GuardaEspaldas = await db.get(`guardaespaldas_${objetivo.id}`) || 0
     const dineroganadoj1 = await db.get(`coinsearned_${userId}`) || 0;
@@ -42,6 +47,20 @@ module.exports = {
         ephemeral: true
       });
    };
+
+    let restante = (cooldowndeff - Date.now()) / 60000;
+    if (Date.now() < cooldowndeff) {
+      return interaction.reply({
+        content: `Por favor espera ${restante.toFixed(1)} minutos para poder sabotear a este jugador`,
+        ephemeral: true});
+    }
+
+    if (userId === objetivo.id) {
+      return interaction.reply({
+        content: 'No puedes sabotarte a ti mismo',
+        ephemeral: true
+      });
+    }
     
     //formula que indica el exito del sabotaje
     let formula = 0.2 * (Saboteadores / (GuardaEspaldas + 1)) 
@@ -51,7 +70,8 @@ module.exports = {
     
     //si valor aleatorio <= a formula, el ataque es exitoso
     if (aleatorio <= formula) {
-      
+      //Establece el cooldown de sabotaje a 30 minutos
+      await db.set(`cooldowndeff_${objetivo.id}`, Date.now() + (30 * 60 * 1000));
       //inicializa variables que calculan las perdidas de ambos bandos
       let vivasoff = Saboteadores - GuardaEspaldas
       let perdidasoff = Saboteadores - vivasoff
@@ -61,7 +81,8 @@ module.exports = {
       //segun las perdidas se actualiza la base de datos para el atacante
       if (vivasoff <= 0) {
         await db.set(`saboteadores_${userId}`, 0);
-        perdidasoff = Saboteadores
+        vivasoff = 0;
+        perdidasoff = Saboteadores;
       } else {
         await db.set(`saboteadores_${userId}`, vivasoff);
       }
@@ -69,7 +90,8 @@ module.exports = {
       //segun las perdidas se actualiza la base de datos para el defensor
       if (vivasdeff <= 0) {
         await db.set(`guardaespaldas_${objetivo.id}`, 0);
-        perdidasdeff = GuardaEspaldas
+        vivasdeff = 0;
+        perdidasdeff = GuardaEspaldas;
       } else {
         await db.set(`guardaespaldas_${objetivo.id}`, vivasdeff);
       }
@@ -94,7 +116,7 @@ module.exports = {
       const embed = new EmbedBuilder()
       .setTitle("Sabotaje Exitoso")
       .setColor("Green")
-      .addFields({ name: "Perdidas del Atacante", value: `${perdidasoff}`, inline: false }, { name: "Perdidas del Defensor", value: `${perdidasdeff}`, inline: false }, { name: "Dinero Robado", value: `${nf2.format(dineroj2 * 0.1)}`, inline: false });
+      .addFields({ name: `Saboteadores vivos: ${displayname1}`, value: `${vivasoff}`, inline: false }, { name: `GuardaEspaldas vivos: ${displayname2}`, value: `${vivasdeff}`, inline: false }, { name: "Dinero Robado", value: `${nf2.format(dineroj2 * 0.1)}`, inline: false });
 
       await interaction.reply({ embeds: [embed] });
       
@@ -125,7 +147,7 @@ module.exports = {
       const embed = new EmbedBuilder()
       .setTitle("Sabotaje Fallido")
       .setColor("Red")
-      .addFields({ name: "Perdidas del Atacante", value: `${perdidasoff}`, inline: false }, { name: "Perdidas del Defensor", value: `${perdidasdeff}`, inline: false });
+      .addFields({ name: `Saboteadores vivos: ${displayname1}`, value: `${vivasoff}`, inline: false }, { name: `GuardaEspaldas vivos: ${displayname2}`, value: `${vivasdeff}`, inline: false });
     
       await interaction.reply({ embeds: [embed] });
 

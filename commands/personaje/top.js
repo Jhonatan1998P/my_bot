@@ -2,7 +2,10 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { QuickDB } = require('quick.db');
 const db = new QuickDB();
 
-const nf2 = new Intl.NumberFormat('en-US');
+//const nf2 = new Intl.NumberFormat('en-US');
+
+const opt = { style: 'currency', currency: 'USD' };
+const nf2 = new Intl.NumberFormat('en-US', opt);
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -25,10 +28,10 @@ module.exports = {
         const userData = await interaction.client.users.fetch(user.id);
         const member = interaction.guild.members.cache.get(user.id);
         const displayName = member ? member.displayName : userData.username;
-        return `${index + 1}. ${displayName}: $${nf2.format(user.coins)}`;
+        return `${index + 1}. ${displayName}: ${nf2.format(user.coins)}`;
       } catch (error) {
         if (error.code === 10013) {
-          return `${index + 1}. Usuario desconocido: $${nf2.format(user.coins)}`;
+          return `${index + 1}. Usuario desconocido: ${nf2.format(user.coins)}`;
         } else {
           throw error;
         }
