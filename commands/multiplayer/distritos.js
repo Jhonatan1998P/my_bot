@@ -14,7 +14,7 @@ module.exports = {
     //debug
     //await db.set(`ocupadoralpha`, "Nadie");
     let OcupadorAlpha = "";
-    if (await db.get(`ocupadoralpha`) == "Nadie") {
+    if (await db.get(`ocupadoralpha`) == "Nadie" || await db.get(`ocupadoralpha`) == null) {
       OcupadorAlpha = "Nadie";
     } else {
       OcupadorAlpha = await interaction.client.users.fetch(await db.get(`ocupadoralpha`))
@@ -49,7 +49,7 @@ module.exports = {
     .setDescription("Selecciona el distrito que quieras ocupar")
     .setColor("Red")
     .addFields(
-      { name: "Distrito Alpha", value: "Su control otorga 25% mas ganancias en todos los inmuebles", inline: true }, {
+      { name: "Distrito Alpha", value: "Su control otorga 100% mas ganancias en todos los inmuebles", inline: true }, {
         name: "Ocupado por: ", value: `${OcupadorAlpha}`, inline: true
       });
     };
@@ -141,7 +141,7 @@ module.exports = {
               PosEmbed = 0;
               
             //actualiza el embed
-            return await i.update({ embeds: [embed]});
+            return await i.update({ embeds: [embed], components: [] });
               
             } else {
                             //nuevo embed
@@ -152,7 +152,7 @@ module.exports = {
               PosEmbed = 0;
               
             //actualiza el embed
-            return await i.update({ embeds: [embed]});
+            return await i.update({ embeds: [embed], components: [] });
             }
             
             

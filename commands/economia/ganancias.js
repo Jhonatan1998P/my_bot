@@ -21,6 +21,14 @@ module.exports = {
     let ed4 = await db.get(`gasolinerias_${interaction.user.id}`) || 0;
     let ed5 = await db.get(`centrocomerciales_${interaction.user.id}`) || 0;
     let ed6 = await db.get(`bancos_${interaction.user.id}`) || 0;
+    
+    let Ocupador = await db.get(`ocupadoralpha`);
+    console.log(Ocupador);
+    let Bn1 = 1;
+
+    if (interaction.user.id == Ocupador) {
+      Bn1 = 2
+    } 
 
     //mejoras
     let mejora1 = await db.get(`mejoracasa_${interaction.user.id}`) || 0;
@@ -33,7 +41,7 @@ module.exports = {
     const TiempoGanancias = await db.get(`tiempoganancias_${interaction.user.id}`) || 0;
     
       const Edificios = [
-      { name: "Casas", amount: ed1, profit: ((ed1 * 10) * (1 + (mejora1 * 0.1))), income: (10 * (1 + (mejora1 * 0.1))) }, { name: "Mansiones", amount: ed2, profit: ((ed2 * 100) * (1 + (mejora2 * 0.1))), income: (100 * (1 + (mejora2 * 0.1))) }, { name: "Fabricas", amount: ed3, profit: ((ed3 * 600) * (1 + (mejora3 * 0.1))), income: (600 * (1 + (mejora3 * 0.1))) }, { name: "Gasolinerias", amount: ed4, profit: ((ed4 * 1500) * (1 + (mejora4 * 0.1))), income: (1500 * (1 + (mejora4 * 0.1))) }, { name: "Centro Comerciales", amount: ed5, profit: ((ed5 * 2100) * (1 + (mejora5 * 0.1))), income: (2100 * (1 + (mejora5 * 0.1))) }, { name: "Bancos", amount: ed6, profit: ((ed6 * 8000) * (1 + (mejora6 * 0.1))), income: (8000 * (1 + (mejora6 * 0.1))) },
+      { name: "Casas", amount: ed1, profit: (((ed1 * 10) * (1 + (mejora1 * 0.1))) * Bn1), income: ((10 * (1 + (mejora1 * 0.1))) * Bn1) }, { name: "Mansiones", amount: ed2, profit: (((ed2 * 100) * (1 + (mejora2 * 0.1))) * Bn1), income: ((100 * (1 + (mejora2 * 0.1))) * Bn1) }, { name: "Fabricas", amount: ed3, profit: (((ed3 * 600) * (1 + (mejora3 * 0.1))) * Bn1), income: ((600 * (1 + (mejora3 * 0.1))) * Bn1) }, { name: "Gasolinerias", amount: ed4, profit: (((ed4 * 1500) * (1 + (mejora4 * 0.1))) * Bn1) , income: ((1500 * (1 + (mejora4 * 0.1))) * Bn1) }, { name: "Centro Comerciales", amount: ed5, profit: (((ed5 * 2100) * (1 + (mejora5 * 0.1))) * Bn1), income: ((2100 * (1 + (mejora5 * 0.1))) * Bn1) }, { name: "Bancos", amount: ed6, profit: (((ed6 * 4000) * (1 + (mejora6 * 0.1))) * Bn1), income: ((4000 * (1 + (mejora6 * 0.1))) * Bn1) },
     ];
       
         /*{ name: "Mansiones", amount: ed2, profit: ((ed2 * 100) * (1 + (mejora2 * 0.1))), income: 100},
