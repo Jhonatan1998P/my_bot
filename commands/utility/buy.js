@@ -31,6 +31,7 @@ module.exports = {
     const itemName = interaction.options.getString('item');
     const userId = interaction.user.id;
     const cantidad = interaction.options.getString('cantidad');
+    const userCoins = await db.get(`coins_${userId}`) || 0;
 
     //este codigo obtiene los edificios del jugador
     let ed1 = await db.get(`casas_${userId}`) || 0;
@@ -40,6 +41,22 @@ module.exports = {
     let ed5 = await db.get(`centrocomerciales_${interaction.user.id}`) || 0;
     let ed6 = await db.get(`bancos_${interaction.user.id}`) || 0;
 
+    if (cantidad == "all" || cantidad == "All") {
+      if (itemName == "Casa") {
+        cantidad = Math.floor(userCoins / ((1000 * (0.05 * ed1)) + 1000));
+      } else if (itemName == "Mansion") {
+        cantidad = Math.floor(userCoins / ((10000 * (0.05 * ed2)) + 10000));
+      } else if (itemName == "Fabrica") {
+        cantidad = Math.floor(userCoins / ((50000 * (0.05 * ed3)) + 50000));
+      } else if (itemName == "Gasolineria") {
+        cantidad = Math.floor(userCoins / ((200000 * (0.05 * ed4)) + 200000));
+      } else if (itemName == "Centro Comercial") {
+        cantidad = Math.floor(userCoins / ((450000 * (0.05 * ed5)) + 450000));
+      } else if (itemName == "Banco") {
+        cantidad = Math.floor(userCoins / ((800000 * (0.05 * ed6)) + 800000));
+      }
+    };
+    
     const shopItems = {
       "Casa": ((1000 * (0.05 * ed1)) + 1000) * cantidad,
       "Mansion": ((10000 * (0.05 * ed2)) + 10000) * cantidad, 
@@ -56,7 +73,6 @@ module.exports = {
     }
 
     const itemPrice = shopItems[itemName];
-    const userCoins = await db.get(`coins_${userId}`) || 0;
 
     if (userCoins < itemPrice) {
       return await interaction.reply(`No tienes \`${itemPrice}\` de dinero para comprar este inmueble o personal.`);

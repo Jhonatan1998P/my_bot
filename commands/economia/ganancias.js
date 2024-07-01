@@ -7,6 +7,7 @@ const nf2 = new Intl.NumberFormat('en-US', opt);
 
 let ganancias = 0;
 let formula = 0;
+//let ganancias_total = 0;
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -63,6 +64,12 @@ module.exports = {
         inline: false,
       });
     });
+
+    embed.addFields({
+         name: "Ganancias totales", 
+         value: `${nf2.format(ganancias)}`,
+         inline: false,
+       });
 
     await db.set(`tiempoganancias_${interaction.user.id}`, Date.now());
 
