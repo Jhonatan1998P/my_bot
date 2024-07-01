@@ -30,7 +30,7 @@ module.exports = {
   async execute(interaction) {
     const itemName = interaction.options.getString('item');
     const userId = interaction.user.id;
-    const cantidad = interaction.options.getString('cantidad');
+    let cantidad = interaction.options.getString('cantidad');
     const userCoins = await db.get(`coins_${userId}`) || 0;
 
     //este codigo obtiene los edificios del jugador
@@ -54,7 +54,11 @@ module.exports = {
         cantidad = Math.floor(userCoins / ((450000 * (0.05 * ed5)) + 450000));
       } else if (itemName == "Banco") {
         cantidad = Math.floor(userCoins / ((800000 * (0.05 * ed6)) + 800000));
-      }
+      } else if (itemName == "Saboteador") {
+        cantidad = Math.floor(userCoins / 10000)
+      } else if (itemName == "GuardaEspalda") {
+        cantidad = Math.floor(userCoins / 5000)
+      };
     };
     
     const shopItems = {
@@ -63,7 +67,7 @@ module.exports = {
       "Fabrica": ((50000 * (0.05 * ed3)) + 50000) * cantidad, 
       "Gasolineria": ((200000 * (0.05 * ed4)) + 200000) * cantidad,
       "Centro Comercial": ((450000 * (0.05 * ed5)) + 450000) * cantidad , 
-      "Banco": (800000 * (0.05 * ed6)) + 800000, 
+      "Banco": ((800000 * (0.05 * ed6)) + 800000) * cantidad, 
       "Saboteador": 10000 * cantidad, 
       "GuardaEspalda": 5000 * cantidad,
     };
