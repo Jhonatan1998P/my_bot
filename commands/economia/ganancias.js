@@ -29,12 +29,12 @@ module.exports = {
     //obtenemos los impulsos activos
     const impulsosActivos = await db.get(`impulsos_${interaction.user.id}`) || [];
 
-    if (interaction.user.id == Ocupador) {
-      Bn1 = 2;
-    } else if (impulsosActivos[0].tiempoRestante > Date.now()) {
-      Bn1 = 2;
-    } else if (impulsosActivos[0].tiempoRestante > Date.now() && interaction.user.id == Ocupador) {
+      if (impulsosActivos.length > 0 && impulsosActivos[0].tiempoRestante > Date.now() && interaction.user.id == Ocupador) {
       Bn1 = 4;
+    } else if (impulsosActivos.length > 0 && impulsosActivos[0].tiempoRestante > Date.now()) {
+      Bn1 = 2;
+    } else if (interaction.user.id == Ocupador) {
+        Bn1 = 2
     };
 
     //mejoras

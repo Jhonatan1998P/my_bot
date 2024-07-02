@@ -32,7 +32,7 @@ module.exports = {
     const userId = interaction.user.id;
     let cantidad = interaction.options.getString('cantidad');
     const userCoins = await db.get(`coins_${userId}`) || 0;
-    const coinsearned = await db.get(`coinsearned_${userId}`) || 0;
+    const coinsearned = await db.get(`coinsearned_${userId}`) || 10000;
 
     //este codigo obtiene los edificios del jugador
     let ed1 = await db.get(`casas_${userId}`) || 0;
@@ -71,7 +71,7 @@ module.exports = {
       "Banco": ((800000 * (0.05 * ed6)) + 800000) * cantidad, 
       "Saboteador": 10000 * cantidad, 
       "GuardaEspalda": 5000 * cantidad,
-      "impulso1": Math.floor(coinsearned / 15),
+      "impulso1": Math.floor(coinsearned / 22),
     };
 
     if (!shopItems[itemName]) {

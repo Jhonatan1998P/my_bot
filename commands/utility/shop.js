@@ -11,6 +11,8 @@ module.exports = {
     .setDescription("Aqui puedes comprar inmuebles nuevos"),
 
   async execute(interaction) {
+    const coinsearned = await db.get(`coinsearned_${interaction.user.id}`) || 10000;
+
     //este codigo obtiene los edificios del jugador
     let ed1 = await db.get(`casas_${interaction.user.id}`) || 0;
     let ed2 = await db.get(`mansiones_${interaction.user.id}`) || 0;
@@ -28,7 +30,8 @@ module.exports = {
       { name: "Centro Comercial", price: (450000 * (0.05 * ed5)) + 450000, income: 2100 }, 
       { name: "Banco", price: (800000 * (0.05 * ed6)) + 800000, income: 4000 }, 
       { name: "Saboteador", price: 10000}, 
-      { name: "GuardaEspalda", price: 5000 },
+      { name: "GuardaEspalda", price: 5000 }, 
+      { name: "Impulso x2", price: Math.floor(coinsearned / 22) }
     ];
 
     //se crea un embed con los edificios disponibles y sus precios
