@@ -16,7 +16,7 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setTitle(`Balance de ${usuario.username}`)
-        .setDescription(`Tienes ${nf2.format(dinero)}`)
+        .setDescription(`Tienes ${nf2.format(dinero)} :dollar:`)
         .setColor("Blue");
 
     await interaction.reply({ embeds: [embed] });

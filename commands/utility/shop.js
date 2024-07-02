@@ -40,7 +40,7 @@ module.exports = {
     shopItems.forEach((item) => {
       embed.addFields({
         name: `${item.name}`,
-        value: `${nf2.format(item.price)}`,
+        value: `${nf2.format(item.price)} :dollar:`,
         inline: false,
       });
     });

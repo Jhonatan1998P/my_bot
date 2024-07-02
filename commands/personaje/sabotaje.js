@@ -101,14 +101,14 @@ interaction.options.getUser('objetivo').displayName;
       let dineroj2 = await db.get(`coins_${objetivo.id}`) || 0;
       
       //agrega y substrae el dinero a los jugadores    
-      if (dineroj2 < (dineroj2 * 0.1)) {
+      if (dineroj2 < (dineroj2 * 0.25)) {
         await db.sub(`coins_${objetivo.id}`, dineroj2)
         await db.add(`coins_${userId}`, dineroj2)
         await db.add(`coinsearned_${userId}`, dineroj2);
       } else {
-      await db.sub(`coins_${objetivo.id}`, dineroj2 * 0.1)
-        await db.add(`coins_${userId}`, dineroj2 * 0.1)
-        await db.add(`coinsearned_${userId}`, dineroj2 * 0.1);
+      await db.sub(`coins_${objetivo.id}`, dineroj2 * 0.25)
+        await db.add(`coins_${userId}`, dineroj2 * 0.25)
+        await db.add(`coinsearned_${userId}`, dineroj2 * 0.25);
       }
 
       //crear embed que muestre los resultados del sabotaje
@@ -116,7 +116,7 @@ interaction.options.getUser('objetivo').displayName;
       const embed = new EmbedBuilder()
       .setTitle("Sabotaje Exitoso")
       .setColor("Green")
-      .addFields({ name: `Saboteadores vivos: ${displayname1}`, value: `${vivasoff}`, inline: false }, { name: `GuardaEspaldas vivos: ${displayname2}`, value: `${vivasdeff}`, inline: false }, { name: "Dinero Robado", value: `${nf2.format(dineroj2 * 0.1)}`, inline: false });
+      .addFields({ name: `Saboteadores vivos: ${displayname1}`, value: `${vivasoff}`, inline: false }, { name: `GuardaEspaldas vivos: ${displayname2}`, value: `${vivasdeff}`, inline: false }, { name: "Dinero Robado", value: `${nf2.format(dineroj2 * 0.25)} :dollar:`, inline: false });
 
       await interaction.reply({ embeds: [embed] });
       

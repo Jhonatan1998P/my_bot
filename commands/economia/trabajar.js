@@ -33,7 +33,7 @@ module.exports = {
     //guarda la cantidad de dinero ganado por el jugador
     await db.add(`coinsearned_${userId}`, ganancias);
 
-    await interaction.reply(`Has trabajado y has ganado ${nf2.format(ganancias)}.`);
+    await interaction.reply(`Has trabajado y has ganado ${nf2.format(ganancias)} :dollar:`);
 
     await db.set(`cooldown_${userId}`, 'true');
     

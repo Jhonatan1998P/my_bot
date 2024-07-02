@@ -23,12 +23,19 @@ module.exports = {
     let ed6 = await db.get(`bancos_${interaction.user.id}`) || 0;
     
     let Ocupador = await db.get(`ocupadoralpha`);
-    console.log(Ocupador);
+    //console.log(Ocupador);
     let Bn1 = 1;
 
+    //obtenemos los impulsos activos
+    const impulsosActivos = await db.get(`impulsos_${interaction.user.id}`) || [];
+
     if (interaction.user.id == Ocupador) {
-      Bn1 = 2
-    } 
+      Bn1 = 2;
+    } else if (impulsosActivos[0].tiempoRestante > Date.now()) {
+      Bn1 = 2;
+    } else if (impulsosActivos[0].tiempoRestante > Date.now() && interaction.user.id == Ocupador) {
+      Bn1 = 4;
+    };
 
     //mejoras
     let mejora1 = await db.get(`mejoracasa_${interaction.user.id}`) || 0;
@@ -67,15 +74,15 @@ module.exports = {
        ganancias = ganancias + formula
 
       embed.addFields({
-        name: `${item.amount}x ${item.name}  ($${item.income}/min)`,
-        value: `${nf2.format(formula)}`,
+        name: `${item.amount}x ${item.name} ($${item.income}/min)`,
+        value: `${nf2.format(formula)} :dollar:`,
         inline: false,
       });
     });
 
     embed.addFields({
          name: "Ganancias totales", 
-         value: `${nf2.format(ganancias)}`,
+         value: `${nf2.format(ganancias)} :dollar:`,
          inline: false,
        });
 

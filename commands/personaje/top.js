@@ -31,7 +31,7 @@ module.exports = {
         return `${index + 1}. ${displayName}: ${nf2.format(user.coins)}`;
       } catch (error) {
         if (error.code === 10013) {
-          return `${index + 1}. Usuario desconocido: ${nf2.format(user.coins)}`;
+          return `${index + 1}. Usuario desconocido: ${nf2.format(user.coins)} :dollar:`;
         } else {
           throw error;
         }

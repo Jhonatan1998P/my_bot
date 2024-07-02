@@ -21,7 +21,7 @@ module.exports = {
         { name: 'Centro Comercial', value: 'Centro Comercial' }, 
         { name: 'Banco', value: 'Banco' }, 
         { name: 'Saboteador', value: 'Saboteador' }, 
-        { name: 'GuardaEspalda', value: 'GuardaEspalda' },))
+        { name: 'GuardaEspalda', value: 'GuardaEspalda' }, { name: 'Impulso x2', value: 'impulso1'},))
     .addStringOption(option => 
       option.setName('cantidad')
       .setDescription('Cantidad de inmuebles a comprar')
@@ -32,6 +32,7 @@ module.exports = {
     const userId = interaction.user.id;
     let cantidad = interaction.options.getString('cantidad');
     const userCoins = await db.get(`coins_${userId}`) || 0;
+    const coinsearned = await db.get(`coinsearned_${userId}`) || 0;
 
     //este codigo obtiene los edificios del jugador
     let ed1 = await db.get(`casas_${userId}`) || 0;
@@ -70,6 +71,7 @@ module.exports = {
       "Banco": ((800000 * (0.05 * ed6)) + 800000) * cantidad, 
       "Saboteador": 10000 * cantidad, 
       "GuardaEspalda": 5000 * cantidad,
+      "impulso1": Math.floor(coinsearned / 15),
     };
 
     if (!shopItems[itemName]) {
@@ -79,7 +81,7 @@ module.exports = {
     const itemPrice = shopItems[itemName];
 
     if (userCoins < itemPrice) {
-      return await interaction.reply(`No tienes \`${itemPrice}\` de dinero para comprar este inmueble o personal.`);
+      return await interaction.reply(`No tienes \`${nf2.format(itemPrice)}\` de dinero para comprar este inmueble o personal.`);
     }
     
 //codigo que guarda el inmueble en la base de datos
@@ -99,12 +101,15 @@ if (itemName === "Casa") {
   await db.add(`saboteadores_${userId}`, cantidad)
 } else if (itemName === "GuardaEspalda") {
   await db.add(`guardaespaldas_${userId}`, cantidad)
+} else if (itemName === "impulso1") {
+  //crea el impulso y lo guarda en la base de datos
+  await db.set(`impulsos_${userId}`, [ { nombre: "Basico", cantidad: "x2", tiempoRestante: (Date.now() + 600000) }]) 
 };
     //console.log("Casas " + await db.get(`casas_${userId}`)) 
     
 //codigo que responde al usuario cuando su compra es exitosa
     await db.sub(`coins_${userId}`, itemPrice);
     
-    await interaction.reply(`Has comprado ${itemName} por \`${nf2.format(itemPrice)}\` monedas. Te quedan ${userCoins - itemPrice} monedas.`);
+    await interaction.reply(`Has comprado ${itemName} por \`${nf2.format(itemPrice)}\` monedas. Te quedan ${nf2.format(userCoins - itemPrice)} monedas.`);
   },
 };
