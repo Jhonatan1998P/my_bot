@@ -74,7 +74,7 @@ module.exports = {
        ganancias = ganancias + formula
 
       embed.addFields({
-        name: `${item.amount}x ${item.name} ($${item.income}/min)`,
+        name: `${item.amount}x ${item.name} ($${Math.floor(item.income)}/min)`,
         value: `${nf2.format(formula)} :dollar:`,
         inline: false,
       });

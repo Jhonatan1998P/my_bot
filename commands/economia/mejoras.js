@@ -21,6 +21,7 @@ module.exports = {
         { name: 'Banco', value: 'Banco' })), 
 
   async execute(interaction) {
+    let costo = 0;
    const userId = interaction.user.id;
    const inmueble = interaction.options.getString('inmueble');
     let dinero = await db.get(`coins_${userId}`) || 0;
@@ -52,7 +53,7 @@ module.exports = {
       
     } else {
       if (inmueble === "Casa") {
-        let costo = (2000000 * (0.50 * mejora1) + 2000000)
+        costo = (2000000 * (20 * mejora1) + 2000000)
 
         if (dinero < costo) {
           return await interaction.reply(`No tienes ${nf2.format(costo)} para mejorar el inmueble Casa`)
@@ -62,7 +63,7 @@ module.exports = {
         await db.add(`mejoracasa_${userId}`, 1);
         
       } else if (inmueble === "Mansion") {
-        let costo = (2000000 * (0.50 * mejora2) + 2000000)
+        costo = (2000000 * (20 * mejora2) + 2000000)
 
         if (dinero < costo) {
           return await interaction.reply(`No tienes ${nf2.format(costo)} para mejorar el inmueble Mansion`)
@@ -72,7 +73,7 @@ module.exports = {
         await db.add(`mejoramansion_${userId}`, 1);
         
       } else if (inmueble === "Fabrica") {
-        let costo = (2000000 * (0.50 * mejora3) + 2000000)
+        costo = (2000000 * (20 * mejora3) + 2000000)
 
         if (dinero < costo) {
           return await interaction.reply(`No tienes ${nf2.format(costo)} para mejorar el inmueble Fabrica`)
@@ -82,7 +83,7 @@ module.exports = {
         await db.add(`mejorafabrica_${userId}`, 1);
         
       } else if (inmueble === "Gasolineria") {
-        let costo = (2000000 * (0.50 * mejora4) + 2000000)
+        costo = (2000000 * (20 * mejora4) + 2000000)
         
         if (dinero < costo) {
           return await interaction.reply(`No tienes ${nf2.format(costo)} para mejorar el inmueble Gasolineria`)
@@ -92,7 +93,7 @@ module.exports = {
         await db.add(`mejoragasolineria_${userId}`, 1);
         
       } else if (inmueble === "Centro Comercial") {
-        let costo = (2000000 * (0.50 * mejora5) + 2000000)
+        costo = (2000000 * (20 * mejora5) + 2000000)
 
         if (dinero < costo) {
           return await interaction.reply(`No tienes ${nf2.format(costo)} para mejorar el inmueble Centro Comercial`)
@@ -102,7 +103,7 @@ module.exports = {
         await db.add(`mejoracomercial_${userId}`, 1);
         
       } else if (inmueble === "Banco") {
-        let costo = (2000000 * (0.50 * mejora6) + 2000000)
+        costo = (2000000 * (20 * mejora6) + 2000000)
 
         if (dinero < costo) {
           return await interaction.reply(`No tienes ${nf2.format(costo)} para mejorar el inmueble Banco`)
@@ -113,7 +114,7 @@ module.exports = {
         
       };
 
-      await interaction.reply(`Has mejorado el inmueble ${inmueble}`)
+      await interaction.reply(`Has mejorado el inmueble ${inmueble} por ${nf2.format(costo)}`)
     };
 
     
